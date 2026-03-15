@@ -22,7 +22,8 @@ public class UserIdentity {
     private UUID id;
 
     @Column(name = "provider")
-    private String provider;
+    @Enumerated(EnumType.STRING)
+    private IdentityProvider provider;
 
     @Column(name = "sub")
     private String sub;
