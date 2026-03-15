@@ -1,0 +1,19 @@
+server:
+  port: ${PORT}
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service-route
+          uri: ${AUTH_SERVICE_ROUTE}
+          predicates:
+            - Path=/api/auth/**
+        - id: user-service-route
+          uri: ${USER_SERVICE_ROUTE}
+          predicates:
+            - Path=/api/users/**
+        - id: parcel-service-route
+          uri: ${PARCEL_SERVICE_ROUTE}
+          predicates:
+            - Path=/api/parcels/**

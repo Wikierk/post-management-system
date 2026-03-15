@@ -1,0 +1,107 @@
+services:
+
+  api-gateway:
+    build:
+      context: ./post-backend/api-gateway
+    container_name: api-gateway
+    networks:
+      - app-network
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: ${API_GATEWAY_PORT}
+      AUTH_SERVICE_ROUTE: http://auth-service:8080
+      USER_SERVICE_ROUTE: http://user-service:8080
+      PARCEL_SERVICE_ROUTE: http://parcel-service:8080
+    depends_on:
+      - user-service
+      - auth-service
+      - parcel-service
+
+  auth-service-db:
+    container_name: auth-service-db
+    image: postgres:latest
+    networks:
+      - app-network
+    ports: # only for testing, database should not be accessed from public network  
+      - "6002:5432"
+    environment:
+      POSTGRES_DB: ${AUTH_SERVICE_DB_NAME}
+      POSTGRES_USER: ${AUTH_SERVICE_DB_USER}
+      POSTGRES_PASSWORD: ${AUTH_SERVICE_DB_PASSWORD}
+
+  auth-service:
+    container_name: auth-service
+    networks:
+      - app-network
+    build:
+      context: ./post-backend/auth-service
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: ${AUTH_SERVICE_DB_HOST}
+      DB_PORT: ${AUTH_SERVICE_DB_PORT}
+      DB_NAME: ${AUTH_SERVICE_DB_NAME}
+      DB_USER: ${AUTH_SERVICE_DB_USER}
+      DB_PASSWORD: ${AUTH_SERVICE_DB_PASSWORD}
+    depends_on:
+      - auth-service-db
+      
+  user-service-db:
+    container_name: user-service-db
+    image: postgres:latest
+    networks:
+      - app-network
+    ports: # only for testing, database should not be accessed from public network  
+      - "6001:5432"
+    environment:
+      POSTGRES_DB: ${USER_SERVICE_DB_NAME}
+      POSTGRES_USER: ${USER_SERVICE_DB_USER}
+      POSTGRES_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+      
+  user-service:
+    container_name: user-service
+    networks:
+      - app-network
+    build:
+      context: ./post-backend/user-service
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: ${USER_SERVICE_DB_HOST}
+      DB_PORT: ${USER_SERVICE_DB_PORT}
+      DB_NAME: ${USER_SERVICE_DB_NAME}
+      DB_USER: ${USER_SERVICE_DB_USER}
+      DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+    depends_on:
+      - user-service-db
+      
+  parcel-service-db:
+    container_name: parcel-service-db
+    image: postgres:latest
+    networks:
+      - app-network
+    ports: # only for testing, database should not be accessed from public network  
+      - "6003:5432"
+    environment:
+      POSTGRES_DB: ${PARCEL_SERVICE_DB_NAME}
+      POSTGRES_USER: ${PARCEL_SERVICE_DB_USER}
+      POSTGRES_PASSWORD: ${PARCEL_SERVICE_DB_PASSWORD}
+
+  parcel-service:
+    container_name: parcel-service
+    networks:
+      - app-network
+    build:
+      context: ./post-backend/parcel-service
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: ${PARCEL_SERVICE_DB_HOST}
+      DB_PORT: ${PARCEL_SERVICE_DB_PORT}
+      DB_NAME: ${PARCEL_SERVICE_DB_NAME}
+      DB_USER: ${PARCEL_SERVICE_DB_USER}
+      DB_PASSWORD: ${PARCEL_SERVICE_DB_PASSWORD}
+    depends_on:
+      - parcel-service-db
+
+networks:
+  app-network:
+    driver: bridge
