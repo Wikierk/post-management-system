@@ -1,4 +1,4 @@
-package com.jowk.dto;
+package dto;
 
 import domain.Role;
 import lombok.AllArgsConstructor;
