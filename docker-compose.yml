@@ -13,6 +13,7 @@ services:
       AUTH_SERVICE_ROUTE: http://auth-service:8080
       USER_SERVICE_ROUTE: http://user-service:8080
       PARCEL_SERVICE_ROUTE: http://parcel-service:8080
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     depends_on:
       - user-service
       - auth-service
@@ -71,6 +72,7 @@ services:
       DB_NAME: ${USER_SERVICE_DB_NAME}
       DB_USER: ${USER_SERVICE_DB_USER}
       DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     depends_on:
       - user-service-db
       
@@ -99,6 +101,7 @@ services:
       DB_NAME: ${PARCEL_SERVICE_DB_NAME}
       DB_USER: ${PARCEL_SERVICE_DB_USER}
       DB_PASSWORD: ${PARCEL_SERVICE_DB_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     depends_on:
       - parcel-service-db
 
