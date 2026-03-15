@@ -1,0 +1,8 @@
+/* App styles - all styling handled by Material-UI theme and components */
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
