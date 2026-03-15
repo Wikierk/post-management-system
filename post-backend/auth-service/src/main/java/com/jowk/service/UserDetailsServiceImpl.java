@@ -2,7 +2,7 @@ package com.jowk.service;
 
 import com.jowk.domain.User;
 import com.jowk.domain.UserRole;
-import dto.AuthenticatedUser;
+import domain.AuthenticatedUser;
 import com.jowk.repository.UserRepository;
 import domain.Role;
 import lombok.RequiredArgsConstructor;

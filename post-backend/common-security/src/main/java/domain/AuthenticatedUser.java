@@ -1,6 +1,5 @@
-package dto;
+package domain;
 
-import domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
