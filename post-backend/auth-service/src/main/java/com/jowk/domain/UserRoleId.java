@@ -3,6 +3,7 @@ package com.jowk.domain;
 import domain.Role;
 import jakarta.persistence.Embeddable;
 import lombok.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Embeddable
@@ -11,7 +12,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoleId {
+public class UserRoleId implements Serializable {
 
     private UUID user;
     private Role role;
