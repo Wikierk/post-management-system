@@ -25,7 +25,7 @@ public class Branch {
     @Enumerated(value = EnumType.STRING)
     private BranchType type;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 

@@ -40,7 +40,7 @@ public class User implements Persistable<UUID> {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(cascade = {CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "owner_id")
     private Set<SavedRecipient> savedRecipients = new HashSet<>();
 

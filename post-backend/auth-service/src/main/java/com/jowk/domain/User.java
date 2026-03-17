@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE users SET is_active = false WHERE user_id = ?")
 public class User {
 
     @Id
@@ -32,10 +35,14 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true)
     private Set<UserIdentity> identities = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true)
     private Set<UserRole> roles = new HashSet<>();
 
 }
