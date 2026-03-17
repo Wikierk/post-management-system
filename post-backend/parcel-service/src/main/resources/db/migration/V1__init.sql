@@ -20,18 +20,25 @@ CREATE TABLE parcel_types (
   is_available BOOLEAN NOT NULL
 );
 
-CREATE TABLE cash_on_delivery_details (
-  cash_on_delivery_details_id UUID PRIMARY KEY,
-  cash_amount NUMERIC(5,2) NOT NULL
+CREATE TABLE parcel_type_snapshots (
+  parcel_type_snapshot_id UUID PRIMARY KEY,
+  max_weight NUMERIC(5,2) NOT NULL,
+  max_width SMALLINT NOT NULL,
+  max_height SMALLINT NOT NULL,
+  max_length SMALLINT NOT NULL,
+  price NUMERIC(5,2) NOT NULL,
+  description TEXT NOT NULL,
+  parcel_type_id SMALLINT NOT NULL
 );
 
 CREATE TABLE parcels (
   tracking_number TEXT PRIMARY KEY,
   status TEXT NOT NULL,
+  total_price NUMERIC(6,2) NOT NULL,
+  cash_on_delivery NUMERIC(7,2),
   sender_id UUID NOT NULL,
   recipient_id UUID NOT NULL,
-  parcel_type_id SMALLINT NOT NULL,
-  cash_on_delivery_details_id UUID
+  parcel_type_snapshot_id UUID NOT NULL
 );
 
 CREATE TABLE logistic_holders (
@@ -51,30 +58,33 @@ CREATE TABLE parcel_histories (
 
 CREATE TABLE additional_services (
   additional_service_id SMALLINT PRIMARY KEY,
-  name VARCHAR UNIQUE NOT NULL,
+  name TEXT UNIQUE NOT NULL,
   price NUMERIC(5,2) NOT NULL,
   is_available BOOLEAN NOT NULL
 );
 
-CREATE TABLE parcel_additional_services (
-  tracking_number TEXT,
-  additional_service_id SMALLINT,
+CREATE TABLE selected_services (
+  selected_service_id UUID PRIMARY KEY,
+  tracking_number TEXT NOT NULL,
+  name TEXT NOT NULL,
   price NUMERIC(5,2) NOT NULL,
-  PRIMARY KEY (tracking_number, additional_service_id)
+  additional_service_id SMALLINT NOT NULL
 );
+
+CREATE UNIQUE INDEX ON selected_services (tracking_number, additional_service_id);
+
+ALTER TABLE parcel_type_snapshots ADD FOREIGN KEY (parcel_type_id) REFERENCES parcel_types (parcel_type_id);
 
 ALTER TABLE parcels ADD FOREIGN KEY (sender_id) REFERENCES parcel_subjects (parcel_subject_id);
 
 ALTER TABLE parcels ADD FOREIGN KEY (recipient_id) REFERENCES parcel_subjects (parcel_subject_id);
 
-ALTER TABLE parcels ADD FOREIGN KEY (parcel_type_id) REFERENCES parcel_types (parcel_type_id);
-
-ALTER TABLE parcels ADD FOREIGN KEY (cash_on_delivery_details_id) REFERENCES cash_on_delivery_details (cash_on_delivery_details_id);
+ALTER TABLE parcels ADD FOREIGN KEY (parcel_type_snapshot_id) REFERENCES parcel_type_snapshots (parcel_type_snapshot_id);
 
 ALTER TABLE parcel_histories ADD FOREIGN KEY (tracking_number) REFERENCES parcels (tracking_number);
 
 ALTER TABLE parcel_histories ADD FOREIGN KEY (logistic_holder_id) REFERENCES logistic_holders (logistic_holder_id);
 
-ALTER TABLE parcel_additional_services ADD FOREIGN KEY (tracking_number) REFERENCES parcels (tracking_number);
+ALTER TABLE selected_services ADD FOREIGN KEY (tracking_number) REFERENCES parcels (tracking_number);
 
-ALTER TABLE parcel_additional_services ADD FOREIGN KEY (additional_service_id) REFERENCES additional_services (additional_service_id);
+ALTER TABLE selected_services ADD FOREIGN KEY (additional_service_id) REFERENCES additional_services (additional_service_id);
