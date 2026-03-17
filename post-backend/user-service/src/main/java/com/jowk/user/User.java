@@ -58,7 +58,7 @@ public class User implements Persistable<UUID> {
     }
 
     @PostLoad
-    @PrePersist
+    @PostPersist
     private void markNotNew() {
         isNew = false;
     }

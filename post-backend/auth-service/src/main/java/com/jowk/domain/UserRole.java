@@ -46,9 +46,9 @@ public class UserRole implements Persistable<UserRoleId> {
     }
 
     @PostLoad
-    @PrePersist
+    @PostPersist
     private void markNotNew() {
-        this.isNew = false;
+        isNew = false;
     }
 
 }
