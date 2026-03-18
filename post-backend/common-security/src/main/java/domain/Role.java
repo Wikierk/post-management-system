@@ -1,9 +1,21 @@
 package domain;
 
 public enum Role {
-    CUSTOMER,
-    COURIER,
-    WAREHOUSEMAN,
-    CLERK,
-    ADMIN
+
+    CUSTOMER(false),
+    COURIER(true),
+    WAREHOUSEMAN(true),
+    CLERK(true),
+    ADMIN(true);
+
+    private final boolean isEmployee;
+
+    Role(boolean isEmployee) {
+        this.isEmployee = isEmployee;
+    }
+
+    public boolean isEmployee() {
+        return isEmployee;
+    }
+
 }

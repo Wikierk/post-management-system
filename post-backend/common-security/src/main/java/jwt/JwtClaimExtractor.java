@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import javax.crypto.SecretKey;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.List;
@@ -39,6 +40,15 @@ public class JwtClaimExtractor {
                 ));
             }
             return roles;
+        });
+    }
+
+    public Optional<UUID> extractBranchId(String token) {
+        return extractClaim(token, claims -> {
+            String idAsText = claims.get(JwtConstants.BRANCH_ID_CLAIM, String.class);
+            return ((idAsText == null) || idAsText.isBlank()) ?
+                    Optional.empty() :
+                    Optional.of(UUID.fromString(idAsText));
         });
     }
 
