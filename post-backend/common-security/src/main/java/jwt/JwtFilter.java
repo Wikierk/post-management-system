@@ -1,5 +1,6 @@
 package jwt;
 
+import domain.AuthenticateEmployee;
 import domain.Role;
 import domain.AuthenticatedUser;
 import jakarta.servlet.FilterChain;
@@ -12,13 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -62,8 +62,14 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         UUID userId = claimExtractor.extractUserId(accessToken);
         Set<Role> roles = mapToRoles(claimExtractor.extractRoles(accessToken));
-        AuthenticatedUser user = new AuthenticatedUser(
-                userId, null, null, roles, true);
+        UserDetails user;
+        if (isEmployee(roles)) {
+            Optional<UUID> branchId = claimExtractor.extractBranchId(accessToken);
+            user = new AuthenticateEmployee(userId, null, null,
+                    roles, true, branchId.orElse(null));
+        } else {
+            user = new AuthenticatedUser(userId, null, null, roles, true);
+        }
         UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
                             user, null, user.getAuthorities());
@@ -81,6 +87,10 @@ public class JwtFilter extends OncePerRequestFilter {
         return roles.stream()
                 .map(Role::valueOf)
                 .collect(Collectors.toSet());
+    }
+
+    private boolean isEmployee(Set<Role> roles) {
+        return roles.stream().anyMatch(Role::isEmployee);
     }
 
 }

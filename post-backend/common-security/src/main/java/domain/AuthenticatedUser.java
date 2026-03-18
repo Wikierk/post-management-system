@@ -2,24 +2,22 @@ package domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticatedUser implements UserDetails {
 
     @Getter
-    private UUID id;
+    private final UUID id;
 
-    private String username;
-    private String password;
-    private Set<Role> roles = new HashSet<>();
-    private boolean isEnabled;
+    private final String username;
+    private final String password;
+    private final Set<Role> roles;
+    private final boolean isEnabled;
 
     @Override
     public String getUsername() {
