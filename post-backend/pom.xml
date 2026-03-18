@@ -25,7 +25,8 @@
 		<module>user-service</module>
 		<module>parcel-service</module>
 		<module>auth-service</module>
-	</modules>
+        <module>common-domain</module>
+    </modules>
 
 	<properties>
 		<java.version>21</java.version>
