@@ -1,4 +1,4 @@
-package com.jowk.parcel;
+package com.jowk.parcel.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

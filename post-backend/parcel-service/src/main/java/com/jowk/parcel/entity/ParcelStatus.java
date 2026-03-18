@@ -1,4 +1,4 @@
-package com.jowk.parcel;
+package com.jowk.parcel.entity;
 
 public enum ParcelStatus {
     REGISTERED,
