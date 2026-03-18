@@ -1,6 +1,5 @@
 package com.jowk.domain;
 
-import domain.Role;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 import java.io.Serializable;

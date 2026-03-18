@@ -1,6 +1,5 @@
 package com.jowk.domain;
 
-import domain.Role;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

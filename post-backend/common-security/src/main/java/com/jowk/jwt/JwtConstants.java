@@ -1,4 +1,4 @@
-package jwt;
+package com.jowk.jwt;
 
 public final class JwtConstants {
 

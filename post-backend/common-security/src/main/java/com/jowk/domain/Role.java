@@ -1,4 +1,4 @@
-package domain;
+package com.jowk.domain;
 
 public enum Role {
 

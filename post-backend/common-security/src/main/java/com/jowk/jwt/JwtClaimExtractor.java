@@ -1,4 +1,4 @@
-package jwt;
+package com.jowk.jwt;
 
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;

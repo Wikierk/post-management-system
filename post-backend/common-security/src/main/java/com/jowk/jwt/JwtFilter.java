@@ -1,8 +1,8 @@
-package jwt;
+package com.jowk.jwt;
 
-import domain.AuthenticateEmployee;
-import domain.Role;
-import domain.AuthenticatedUser;
+import com.jowk.domain.AuthenticateEmployee;
+import com.jowk.domain.Role;
+import com.jowk.domain.AuthenticatedUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

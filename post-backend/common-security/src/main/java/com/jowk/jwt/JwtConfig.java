@@ -1,24 +1,25 @@
-package jwt;
+package com.jowk.jwt;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
 import javax.crypto.SecretKey;
 
 @Configuration
-@ConfigurationProperties(prefix = "application.security.jwt")
-@Getter
-@Setter
+@RequiredArgsConstructor
 public class JwtConfig {
 
-    private String secretKey;
+    private final Environment env;
 
     @Bean
     public SecretKey signingKey() {
+        String secretKey = System.getenv("JWT_SECRET_KEY");
+        System.out.println("Secret key: " + secretKey);
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
