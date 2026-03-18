@@ -2,9 +2,9 @@ package com.jowk.service;
 
 import com.jowk.domain.User;
 import com.jowk.domain.UserRole;
-import domain.AuthenticatedUser;
+import com.jowk.domain.AuthenticatedUser;
 import com.jowk.repository.UserRepository;
-import domain.Role;
+import com.jowk.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

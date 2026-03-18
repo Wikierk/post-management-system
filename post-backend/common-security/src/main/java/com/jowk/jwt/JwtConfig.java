@@ -3,11 +3,9 @@ package com.jowk.jwt;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
 import javax.crypto.SecretKey;
 
 @Configuration
@@ -19,7 +17,6 @@ public class JwtConfig {
     @Bean
     public SecretKey signingKey() {
         String secretKey = System.getenv("JWT_SECRET_KEY");
-        System.out.println("Secret key: " + secretKey);
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
