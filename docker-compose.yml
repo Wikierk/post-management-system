@@ -41,6 +41,7 @@ services:
       DB_NAME: ${AUTH_SERVICE_DB_NAME}
       DB_USER: ${AUTH_SERVICE_DB_USER}
       DB_PASSWORD: ${AUTH_SERVICE_DB_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     depends_on:
       - auth-service-db
       
