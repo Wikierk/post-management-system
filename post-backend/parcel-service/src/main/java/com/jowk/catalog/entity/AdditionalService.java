@@ -1,5 +1,6 @@
-package com.jowk.catalog;
+package com.jowk.catalog.entity;
 
+import com.jowk.AggregateRoot;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class AdditionalService {
+public class AdditionalService implements AggregateRoot {
 
     @Id
     @Column(name = "additional_service_id")
@@ -29,5 +30,8 @@ public class AdditionalService {
 
     @Column(name = "is_available")
     private boolean isAvailable;
+
+    @Version
+    private Long version;
 
 }

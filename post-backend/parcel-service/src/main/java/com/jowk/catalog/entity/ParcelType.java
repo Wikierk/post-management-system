@@ -1,5 +1,6 @@
-package com.jowk.catalog;
+package com.jowk.catalog.entity;
 
+import com.jowk.AggregateRoot;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class ParcelType {
+public class ParcelType implements AggregateRoot {
 
     @Id
     @Column(name = "parcel_type_id")
@@ -41,5 +42,8 @@ public class ParcelType {
 
     @Column(name = "is_available")
     private boolean isAvailable;
+
+    @Version
+    private Long version;
 
 }
