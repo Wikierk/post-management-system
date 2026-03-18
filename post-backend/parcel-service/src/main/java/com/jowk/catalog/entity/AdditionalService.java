@@ -31,7 +31,4 @@ public class AdditionalService implements AggregateRoot {
     @Column(name = "is_available")
     private boolean isAvailable;
 
-    @Version
-    private Long version;
-
 }
