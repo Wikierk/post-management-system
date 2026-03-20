@@ -1,6 +1,6 @@
 package com.jowk.parcel.catalog.entity;
 
-import com.jowk.AggregateRoot;
+import com.jowk.common.domain.AggregateRoot;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

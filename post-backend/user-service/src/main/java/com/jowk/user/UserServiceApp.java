@@ -1,18 +1,18 @@
-package com.jowk.parcel;
+package com.jowk.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
-        "com.jowk.parcel",
+        "com.jowk.user",
         "com.jowk.common.security",
         "com.jowk.common.domain",
         "com.jowk.common.api"
 })
-public class ParcelServiceApp {
+public class UserServiceApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(ParcelServiceApp.class, args);
+        SpringApplication.run(UserServiceApp.class, args);
     }
 
 }
