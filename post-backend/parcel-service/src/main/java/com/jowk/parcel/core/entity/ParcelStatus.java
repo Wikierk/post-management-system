@@ -1,0 +1,14 @@
+package com.jowk.parcel.core.entity;
+
+public enum ParcelStatus {
+    REGISTERED,
+    PAID,
+    RECEIVED_AT_POST_OFFICE,
+    RECEIVED_AT_WAREHOUSE,
+    IN_TRANSIT,
+    AVAILABLE_FOR_PICKUP,
+    OUT_FOR_DELIVERY,
+    DELIVERED,
+    DELIVERY_ATTEMPTED,
+    NOT_ACCEPTED_BY_RECIPIENT
+}
