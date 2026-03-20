@@ -1,6 +1,11 @@
 server:
   port: ${PORT}
 
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY}
+
 spring:
   cloud:
     gateway:
@@ -17,3 +22,17 @@ spring:
           uri: ${PARCEL_SERVICE_ROUTE}
           predicates:
             - Path=/api/parcels/**
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: "Parcel Service"
+        url: /api/parcels/v3/api-docs
+      - name: "User Service"
+        url: /api/users/v3/api-docs
+      - name: "Auth Service"
+        url: /api/auth/v3/api-docs
