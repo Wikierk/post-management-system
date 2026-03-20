@@ -4,7 +4,7 @@ import com.jowk.catalog.dto.AdditionalServiceDetails;
 import com.jowk.catalog.dto.ParcelTypeDetails;
 import java.util.List;
 
-public interface CatalogService {
+public interface CatalogReadService {
 
     List<ParcelTypeDetails> getAvailableParcelTypes();
     List<AdditionalServiceDetails> getAvailableAdditionalServices();

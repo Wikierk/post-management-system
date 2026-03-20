@@ -1,7 +1,7 @@
 package com.jowk.catalog.impl;
 
 import com.jowk.catalog.AdditionalServiceRepository;
-import com.jowk.catalog.CatalogService;
+import com.jowk.catalog.CatalogReadService;
 import com.jowk.catalog.ParcelTypeRepository;
 import com.jowk.catalog.dto.AdditionalServiceDetails;
 import com.jowk.catalog.dto.ParcelTypeDetails;
@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CatalogServiceImpl implements CatalogService {
+public class CatalogReadServiceImpl implements CatalogReadService {
 
     private final AdditionalServiceRepository additionalServiceRepository;
     private final ParcelTypeRepository parcelTypeRepository;
