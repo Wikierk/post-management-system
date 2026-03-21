@@ -41,7 +41,7 @@ public interface CatalogAdminApi {
             @ApiResponse(responseCode = "403", description = "Forbidden - you don't have permission to create types")
     })
     @PostMapping("/types")
-    ResponseEntity<ParcelTypeDetails> createParcelType(
+    ResponseEntity<ParcelTypeSummary> createParcelType(
             @RequestBody @Valid CreateParcelTypeRequest request);
 
     @Operation(summary = "Update an existing parcel type",
@@ -50,10 +50,11 @@ public interface CatalogAdminApi {
             @ApiResponse(responseCode = "200", description = "Parcel type was successfully updated"),
             @ApiResponse(responseCode = "400", description = "Invalid data provided"),
             @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions"),
-            @ApiResponse(responseCode = "404", description = "Parcel type not found")
+            @ApiResponse(responseCode = "404", description = "Parcel type not found"),
+            @ApiResponse(responseCode = "409", description = "Conflict - parcel type is archived and cannot be modified")
     })
     @PatchMapping("/types/{typeId}")
-    ResponseEntity<ParcelTypeDetails> updateParcelType(
+    ResponseEntity<ParcelTypeSummary> updateParcelType(
             @PathVariable("typeId") Short typeId,
             @RequestBody @Valid UpdateParcelTypeRequest request
     );
@@ -62,8 +63,9 @@ public interface CatalogAdminApi {
             description = "Marks a parcel type as unavailable for customers. It remains in history.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Parcel was successfully archived"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions"),
             @ApiResponse(responseCode = "404", description = "Parcel type not found"),
-            @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions")
+            @ApiResponse(responseCode = "409", description = "Conflict - parcel type is already archived")
     })
     @PostMapping("/types/{typeId}/archive")
     ResponseEntity<Void> archiveParcelType(
@@ -78,7 +80,7 @@ public interface CatalogAdminApi {
             @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions")
     })
     @PostMapping("/additional-services")
-    ResponseEntity<AdditionalServiceDetails> createAdditionalService(
+    ResponseEntity<AdditionalServiceSummary> createAdditionalService(
             @RequestBody @Valid CreateAdditionalServiceRequest request);
 
     @Operation(summary = "Update an additional service",
@@ -87,10 +89,11 @@ public interface CatalogAdminApi {
             @ApiResponse(responseCode = "200", description = "Service was successfully updated"),
             @ApiResponse(responseCode = "400", description = "Invalid data provided"),
             @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions"),
-            @ApiResponse(responseCode = "404", description = "Service not found")
+            @ApiResponse(responseCode = "404", description = "Service not found"),
+            @ApiResponse(responseCode = "409", description = "Conflict - service is archived and cannot be modified")
     })
     @PatchMapping("/additional-services/{serviceId}")
-    ResponseEntity<AdditionalServiceDetails> updateAdditionalService(
+    ResponseEntity<AdditionalServiceSummary> updateAdditionalService(
             @PathVariable("serviceId") Short serviceId,
             @RequestBody @Valid UpdateAdditionalServiceRequest request
     );
@@ -100,7 +103,8 @@ public interface CatalogAdminApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Service was successfully archived"),
             @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions"),
-            @ApiResponse(responseCode = "404", description = "Service not found")
+            @ApiResponse(responseCode = "404", description = "Service not found"),
+            @ApiResponse(responseCode = "409", description = "Conflict - service is already archived")
     })
     @PostMapping("/additional-services/{serviceId}/archive")
     ResponseEntity<Void> archiveAdditionalService(

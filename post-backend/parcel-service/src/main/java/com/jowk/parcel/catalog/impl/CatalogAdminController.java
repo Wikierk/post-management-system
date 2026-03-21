@@ -31,16 +31,16 @@ public class CatalogAdminController implements CatalogAdminApi {
     }
 
     @Override
-    public ResponseEntity<ParcelTypeDetails> createParcelType(
+    public ResponseEntity<ParcelTypeSummary> createParcelType(
             CreateParcelTypeRequest request) {
-        ParcelTypeDetails parcelType = updateService.createParcelType(request);
+        ParcelTypeSummary parcelType = updateService.createParcelType(request);
         return ResponseEntity.ok(parcelType);
     }
 
     @Override
-    public ResponseEntity<ParcelTypeDetails> updateParcelType(
+    public ResponseEntity<ParcelTypeSummary> updateParcelType(
             Short typeId, UpdateParcelTypeRequest request) {
-        ParcelTypeDetails parcelType = updateService
+        ParcelTypeSummary parcelType = updateService
                 .updateParcelType(typeId, request);
         return ResponseEntity.ok(parcelType);
     }
@@ -53,17 +53,17 @@ public class CatalogAdminController implements CatalogAdminApi {
     }
 
     @Override
-    public ResponseEntity<AdditionalServiceDetails> createAdditionalService(
+    public ResponseEntity<AdditionalServiceSummary> createAdditionalService(
             CreateAdditionalServiceRequest request) {
-        AdditionalServiceDetails additionalService = updateService
+        AdditionalServiceSummary additionalService = updateService
                 .createAdditionalService(request);
         return ResponseEntity.ok(additionalService);
     }
 
     @Override
-    public ResponseEntity<AdditionalServiceDetails> updateAdditionalService(
+    public ResponseEntity<AdditionalServiceSummary> updateAdditionalService(
             Short serviceId, UpdateAdditionalServiceRequest request) {
-        AdditionalServiceDetails additionalService = updateService
+        AdditionalServiceSummary additionalService = updateService
                 .updateAdditionalService(serviceId, request);
         return ResponseEntity.ok(additionalService);
     }

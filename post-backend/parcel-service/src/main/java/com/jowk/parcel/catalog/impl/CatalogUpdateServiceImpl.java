@@ -20,7 +20,7 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
     private final ParcelTypeRepository parcelTypeRepository;
 
     @Override
-    public ParcelTypeDetails createParcelType(CreateParcelTypeRequest request) {
+    public ParcelTypeSummary createParcelType(CreateParcelTypeRequest request) {
         ParcelType type = new ParcelType();
         type.setMaxWeight(request.maxWeight());
         type.setMaxWidth(request.maxWidth());
@@ -30,11 +30,11 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         type.setDescription(request.description());
         type.setAvailable(true);
         ParcelType createdType = parcelTypeRepository.save(type);
-        return ParcelTypeDetails.fromEntity(createdType);
+        return ParcelTypeSummary.fromEntity(createdType);
     }
 
     @Override
-    public ParcelTypeDetails updateParcelType(
+    public ParcelTypeSummary updateParcelType(
             short typeId, UpdateParcelTypeRequest request) {
         ParcelType type = parcelTypeRepository.findById(typeId)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -45,7 +45,7 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         if (request.maxLength() != null) type.setMaxLength(request.maxLength());
         if (request.price() != null) type.setPrice(request.price());
         if (request.description() != null) type.setDescription(request.description());
-        return ParcelTypeDetails.fromEntity(type);
+        return ParcelTypeSummary.fromEntity(type);
     }
 
     @Override
@@ -57,25 +57,25 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
     }
 
     @Override
-    public AdditionalServiceDetails createAdditionalService(
+    public AdditionalServiceSummary createAdditionalService(
             CreateAdditionalServiceRequest request) {
         AdditionalService service = new AdditionalService();
         service.setName(request.name());
         service.setPrice(request.price());
         service.setAvailable(true);
         AdditionalService createdService = additionalServiceRepository.save(service);
-        return AdditionalServiceDetails.fromEntity(createdService);
+        return AdditionalServiceSummary.fromEntity(createdService);
     }
 
     @Override
-    public AdditionalServiceDetails updateAdditionalService(
+    public AdditionalServiceSummary updateAdditionalService(
             short serviceId, UpdateAdditionalServiceRequest request) {
         AdditionalService service = additionalServiceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Additional service of given ID was not found."));
         if (request.name() != null) service.setName(request.name());
         if (request.price() != null) service.setPrice(request.price());
-        return AdditionalServiceDetails.fromEntity(service);
+        return AdditionalServiceSummary.fromEntity(service);
     }
 
     @Override

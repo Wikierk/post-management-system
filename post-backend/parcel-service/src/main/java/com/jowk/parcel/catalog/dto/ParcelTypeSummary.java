@@ -3,7 +3,7 @@ package com.jowk.parcel.catalog.dto;
 import com.jowk.parcel.catalog.entity.ParcelType;
 import java.math.BigDecimal;
 
-public record ParcelTypeDetails(
+public record ParcelTypeSummary(
 
         Short id,
         BigDecimal maxWeight,
@@ -11,16 +11,15 @@ public record ParcelTypeDetails(
         Short maxHeight,
         Short maxLength,
         BigDecimal price,
-        String description,
-        Boolean isAvailable
+        String description
 
 ) {
 
-    public static ParcelTypeDetails fromEntity(ParcelType parcelType) {
-        return new ParcelTypeDetails(parcelType.getId(), parcelType.getMaxWeight(),
+    public static ParcelTypeSummary fromEntity(ParcelType parcelType) {
+        return new ParcelTypeSummary(parcelType.getId(), parcelType.getMaxWeight(),
                 parcelType.getMaxWidth(), parcelType.getMaxHeight(),
                 parcelType.getMaxLength(), parcelType.getPrice(),
-                parcelType.getDescription(), parcelType.isAvailable());
+                parcelType.getDescription());
     }
 
 }

@@ -4,13 +4,13 @@ import com.jowk.parcel.catalog.dto.*;
 
 public interface CatalogUpdateService {
 
-    ParcelTypeDetails createParcelType(CreateParcelTypeRequest request);
-    ParcelTypeDetails updateParcelType(short typeId,
+    ParcelTypeSummary createParcelType(CreateParcelTypeRequest request);
+    ParcelTypeSummary updateParcelType(short typeId,
             UpdateParcelTypeRequest request);
     void archiveParcelType(short typeId);
-    AdditionalServiceDetails createAdditionalService(
+    AdditionalServiceSummary createAdditionalService(
             CreateAdditionalServiceRequest request);
-    AdditionalServiceDetails updateAdditionalService(
+    AdditionalServiceSummary updateAdditionalService(
             short serviceId, UpdateAdditionalServiceRequest request);
     void archiveAdditionalService(short serviceId);
 

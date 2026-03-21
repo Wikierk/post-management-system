@@ -4,7 +4,9 @@ import com.jowk.parcel.catalog.AdditionalServiceRepository;
 import com.jowk.parcel.catalog.CatalogReadService;
 import com.jowk.parcel.catalog.ParcelTypeRepository;
 import com.jowk.parcel.catalog.dto.AdditionalServiceDetails;
+import com.jowk.parcel.catalog.dto.AdditionalServiceSummary;
 import com.jowk.parcel.catalog.dto.ParcelTypeDetails;
+import com.jowk.parcel.catalog.dto.ParcelTypeSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,18 +21,18 @@ public class CatalogReadServiceImpl implements CatalogReadService {
     private final ParcelTypeRepository parcelTypeRepository;
 
     @Override
-    public List<ParcelTypeDetails> getAvailableParcelTypes() {
+    public List<ParcelTypeSummary> getAvailableParcelTypes() {
         return parcelTypeRepository.findAllByIsAvailableTrue()
                 .stream()
-                .map(ParcelTypeDetails::fromEntity)
+                .map(ParcelTypeSummary::fromEntity)
                 .toList();
     }
 
     @Override
-    public List<AdditionalServiceDetails> getAvailableAdditionalServices() {
+    public List<AdditionalServiceSummary> getAvailableAdditionalServices() {
         return additionalServiceRepository.findAllByIsAvailableTrue()
                 .stream()
-                .map(AdditionalServiceDetails::fromEntity)
+                .map(AdditionalServiceSummary::fromEntity)
                 .toList();
     }
 

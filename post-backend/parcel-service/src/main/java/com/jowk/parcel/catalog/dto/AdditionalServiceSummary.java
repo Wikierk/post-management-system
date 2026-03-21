@@ -3,22 +3,20 @@ package com.jowk.parcel.catalog.dto;
 import com.jowk.parcel.catalog.entity.AdditionalService;
 import java.math.BigDecimal;
 
-public record AdditionalServiceDetails(
+public record AdditionalServiceSummary(
 
         Short id,
         String name,
-        BigDecimal price,
-        Boolean isAvailable
+        BigDecimal price
 
 ) {
 
-    public static AdditionalServiceDetails fromEntity(
+    public static AdditionalServiceSummary fromEntity(
             AdditionalService additionalService) {
-        return new AdditionalServiceDetails(
+        return new AdditionalServiceSummary(
                 additionalService.getId(),
                 additionalService.getName(),
-                additionalService.getPrice(),
-                additionalService.isAvailable()
+                additionalService.getPrice()
         );
     }
 
