@@ -1,12 +1,13 @@
 package com.jowk.parcel.catalog.impl;
 
+import com.jowk.common.domain.exception.ArchivedResourceModificationException;
 import com.jowk.parcel.catalog.AdditionalServiceRepository;
 import com.jowk.parcel.catalog.CatalogUpdateService;
 import com.jowk.parcel.catalog.ParcelTypeRepository;
 import com.jowk.parcel.catalog.dto.*;
 import com.jowk.parcel.catalog.entity.AdditionalService;
 import com.jowk.parcel.catalog.entity.ParcelType;
-import com.jowk.common.api.exception.EntityNotFoundException;
+import com.jowk.common.domain.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,10 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         ParcelType type = parcelTypeRepository.findById(typeId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Parcel type of given ID was not found."));
+        if (!type.isAvailable()) {
+            throw new ArchivedResourceModificationException(
+                    "Archived type can not be modified.");
+        }
         if (request.maxWeight() != null) type.setMaxWeight(request.maxWeight());
         if (request.maxWidth() != null) type.setMaxWidth(request.maxWidth());
         if (request.maxHeight() != null) type.setMaxHeight(request.maxHeight());
@@ -53,6 +58,10 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         ParcelType type = parcelTypeRepository.findById(typeId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Parcel type of given ID was not found."));
+        if (!type.isAvailable()) {
+            throw new ArchivedResourceModificationException(
+                    "Type is already archived.");
+        }
         type.setAvailable(false);
     }
 
@@ -73,6 +82,10 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         AdditionalService service = additionalServiceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Additional service of given ID was not found."));
+        if (!service.isAvailable()) {
+            throw new ArchivedResourceModificationException(
+                    "Archived service can not be modified.");
+        }
         if (request.name() != null) service.setName(request.name());
         if (request.price() != null) service.setPrice(request.price());
         return AdditionalServiceSummary.fromEntity(service);
@@ -83,6 +96,10 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         AdditionalService service = additionalServiceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Additional service of given ID was not found."));
+        if (!service.isAvailable()) {
+            throw new ArchivedResourceModificationException(
+                    "Service is already archived.");
+        }
         service.setAvailable(false);
     }
 

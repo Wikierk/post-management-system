@@ -1,4 +1,4 @@
-package com.jowk.common.api.exception;
+package com.jowk.common.domain.exception;
 
 public class EntityNotFoundException extends RuntimeException {
 
