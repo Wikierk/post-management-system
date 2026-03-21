@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.jowk.user",
         "com.jowk.common.security",
         "com.jowk.common.domain",
-        "com.jowk.common.api"
+        "com.jowk.common.api",
+        "com.jowk.common.web"
 })
 public class UserServiceApp {
 
