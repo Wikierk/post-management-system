@@ -22,8 +22,28 @@ spring:
           uri: ${PARCEL_SERVICE_ROUTE}
           predicates:
             - Path=/api/parcels/**
+        - id: parcel-service-admin-route
+          uri: ${PARCEL_SERVICE_ROUTE}
+          predicates:
+            - Path=/api/admin/parcels/**
+    globalcors:
+      add-to-chain: true
+      cors-configurations:
+        '[/**]':
+          allowedOrigins: "*"
+          allowedMethods:
+            - GET
+            - POST
+            - PATCH
+            - PUT
+            - DELETE
+            - OPTIONS
+          allowedHeaders: "*"
 
 springdoc:
+  server:
+#    url: http://localhost:8080
+    url: ${BASE_URL}
   api-docs:
     enabled: true
   swagger-ui:

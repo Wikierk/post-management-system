@@ -10,7 +10,7 @@ CREATE TABLE parcel_subjects (
 );
 
 CREATE TABLE parcel_types (
-  parcel_type_id SMALLINT PRIMARY KEY,
+  parcel_type_id SMALLSERIAL PRIMARY KEY,
   max_weight NUMERIC(5,2) NOT NULL,
   max_width SMALLINT NOT NULL,
   max_height SMALLINT NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE parcel_histories (
 );
 
 CREATE TABLE additional_services (
-  additional_service_id SMALLINT PRIMARY KEY,
+  additional_service_id SMALLSERIAL PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
   price NUMERIC(5,2) NOT NULL,
   is_available BOOLEAN NOT NULL

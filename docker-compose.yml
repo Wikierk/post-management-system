@@ -9,6 +9,7 @@ services:
       - "8080:8080"
     environment:
       PORT: ${API_GATEWAY_PORT}
+      BASE_URL: ${API_GATEWAY_BASE_URL}
       AUTH_SERVICE_ROUTE: http://auth-service:8080
       USER_SERVICE_ROUTE: http://user-service:8080
       PARCEL_SERVICE_ROUTE: http://parcel-service:8080
@@ -32,7 +33,6 @@ services:
   auth-service:
     build:
       context: ./post-backend/auth-service
-      dockerfile: Dockerfile
     networks:
       - app-network
     environment:
@@ -59,7 +59,6 @@ services:
   user-service:
     build:
       context: ./post-backend/user-service
-      dockerfile: Dockerfile
     networks:
       - app-network
     environment:
@@ -86,7 +85,6 @@ services:
   parcel-service:
     build:
       context: ./post-backend/parcel-service
-      dockerfile: Dockerfile
     networks:
       - app-network
     environment:
