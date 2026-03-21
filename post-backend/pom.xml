@@ -27,7 +27,8 @@
 		<module>auth-service</module>
         <module>common-domain</module>
 		<module>common-api</module>
-	</modules>
+        <module>common-web</module>
+    </modules>
 
 	<properties>
 		<java.version>21</java.version>
