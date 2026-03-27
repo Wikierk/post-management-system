@@ -1,4 +1,4 @@
-package com.jowk.user.branch;
+package com.jowk.user.branch.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -32,5 +32,12 @@ public class Address {
 
     @Column(name = "zip_code")
     private String zipCode;
+
+    public Address(String city, String street, String number, String zipCode) {
+        this.city = city;
+        this.street = street;
+        this.number = number;
+        this.zipCode = zipCode;
+    }
 
 }

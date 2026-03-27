@@ -42,7 +42,6 @@ spring:
 
 springdoc:
   server:
-#    url: http://localhost:8080
     url: ${BASE_URL}
   api-docs:
     enabled: true

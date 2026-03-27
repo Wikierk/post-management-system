@@ -1,6 +1,6 @@
 package com.jowk.user.employee;
 
-import com.jowk.user.branch.Branch;
+import com.jowk.user.branch.entity.Branch;
 import com.jowk.user.core.User;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

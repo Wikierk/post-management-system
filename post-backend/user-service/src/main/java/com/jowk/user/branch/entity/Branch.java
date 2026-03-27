@@ -1,4 +1,4 @@
-package com.jowk.user.branch;
+package com.jowk.user.branch.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -28,5 +28,10 @@ public class Branch {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
+
+    public Branch(BranchType type, Address address) {
+        this.type = type;
+        this.address = address;
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.jowk.user.branch;
+package com.jowk.user.branch.entity;
 
 public enum BranchType {
     POST_OFFICE,
