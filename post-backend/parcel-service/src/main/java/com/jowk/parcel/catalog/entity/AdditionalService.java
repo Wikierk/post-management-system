@@ -2,17 +2,13 @@ package com.jowk.parcel.catalog.entity;
 
 import com.jowk.common.domain.AggregateRoot;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "additional_services")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AdditionalService implements AggregateRoot {
 
@@ -30,5 +26,57 @@ public class AdditionalService implements AggregateRoot {
 
     @Column(name = "is_available")
     private boolean isAvailable;
+
+    @Version
+    @Column(name = "version")
+    private Long version;
+
+    public AdditionalService(String name, BigDecimal price) {
+        validateName(name);
+        validatePrice(price);
+        this.name = name;
+        this.price = price;
+        this.isAvailable = true;
+    }
+
+    public void changeName(String newName) {
+        validateNotArchived();
+        validateName(newName);
+        this.name = newName;
+    }
+
+    public void changePrice(BigDecimal newPrice) {
+        validateNotArchived();
+        validatePrice(newPrice);
+        this.price = newPrice;
+    }
+
+    public void disable() {
+        if (!this.isAvailable) {
+            throw new IllegalStateException("Additional service is already disabled.");
+        }
+        this.isAvailable = false;
+    }
+
+    private void validateNotArchived() {
+        if (!this.isAvailable) {
+            throw new IllegalStateException("Cannot modify archived additional service.");
+        }
+    }
+
+    private void validatePrice(BigDecimal price) {
+        if (price == null) {
+            throw new IllegalArgumentException("Price cannot be null.");
+        }
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price cannot be negative.");
+        }
+    }
+
+    private void validateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be null or empty.");
+        }
+    }
 
 }

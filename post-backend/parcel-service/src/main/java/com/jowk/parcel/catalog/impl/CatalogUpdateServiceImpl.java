@@ -1,6 +1,5 @@
 package com.jowk.parcel.catalog.impl;
 
-import com.jowk.common.domain.exception.ArchivedResourceModificationException;
 import com.jowk.parcel.catalog.AdditionalServiceRepository;
 import com.jowk.parcel.catalog.CatalogUpdateService;
 import com.jowk.parcel.catalog.ParcelTypeRepository;
@@ -22,14 +21,9 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
 
     @Override
     public ParcelTypeSummary createParcelType(CreateParcelTypeRequest request) {
-        ParcelType type = new ParcelType();
-        type.setMaxWeight(request.maxWeight());
-        type.setMaxWidth(request.maxWidth());
-        type.setMaxHeight(request.maxHeight());
-        type.setMaxLength(request.maxLength());
-        type.setPrice(request.price());
-        type.setDescription(request.description());
-        type.setAvailable(true);
+        ParcelType type = new ParcelType(request.maxWeight(), request.maxWidth(),
+                request.maxHeight(), request.maxLength(), request.price(),
+                request.description());
         ParcelType createdType = parcelTypeRepository.save(type);
         return ParcelTypeSummary.fromEntity(createdType);
     }
@@ -40,16 +34,12 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         ParcelType type = parcelTypeRepository.findById(typeId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Parcel type of given ID was not found."));
-        if (!type.isAvailable()) {
-            throw new ArchivedResourceModificationException(
-                    "Archived type can not be modified.");
-        }
-        if (request.maxWeight() != null) type.setMaxWeight(request.maxWeight());
-        if (request.maxWidth() != null) type.setMaxWidth(request.maxWidth());
-        if (request.maxHeight() != null) type.setMaxHeight(request.maxHeight());
-        if (request.maxLength() != null) type.setMaxLength(request.maxLength());
-        if (request.price() != null) type.setPrice(request.price());
-        if (request.description() != null) type.setDescription(request.description());
+        if (request.maxWeight() != null) type.changeMaxWeight(request.maxWeight());
+        if (request.maxWidth() != null) type.changeMaxWidth(request.maxWidth());
+        if (request.maxHeight() != null) type.changeMaxHeight(request.maxHeight());
+        if (request.maxLength() != null) type.changeMaxLength(request.maxLength());
+        if (request.price() != null) type.changePrice(request.price());
+        if (request.description() != null) type.changeDescription(request.description());
         return ParcelTypeSummary.fromEntity(type);
     }
 
@@ -58,20 +48,14 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         ParcelType type = parcelTypeRepository.findById(typeId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Parcel type of given ID was not found."));
-        if (!type.isAvailable()) {
-            throw new ArchivedResourceModificationException(
-                    "Type is already archived.");
-        }
-        type.setAvailable(false);
+        type.disable();
     }
 
     @Override
     public AdditionalServiceSummary createAdditionalService(
             CreateAdditionalServiceRequest request) {
-        AdditionalService service = new AdditionalService();
-        service.setName(request.name());
-        service.setPrice(request.price());
-        service.setAvailable(true);
+        AdditionalService service = new AdditionalService(
+                request.name(), request.price());
         AdditionalService createdService = additionalServiceRepository.save(service);
         return AdditionalServiceSummary.fromEntity(createdService);
     }
@@ -82,12 +66,8 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         AdditionalService service = additionalServiceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Additional service of given ID was not found."));
-        if (!service.isAvailable()) {
-            throw new ArchivedResourceModificationException(
-                    "Archived service can not be modified.");
-        }
-        if (request.name() != null) service.setName(request.name());
-        if (request.price() != null) service.setPrice(request.price());
+        if (request.name() != null) service.changeName(request.name());
+        if (request.price() != null) service.changePrice(request.price());
         return AdditionalServiceSummary.fromEntity(service);
     }
 
@@ -96,11 +76,7 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         AdditionalService service = additionalServiceRepository.findById(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Additional service of given ID was not found."));
-        if (!service.isAvailable()) {
-            throw new ArchivedResourceModificationException(
-                    "Service is already archived.");
-        }
-        service.setAvailable(false);
+        service.disable();
     }
 
 }
