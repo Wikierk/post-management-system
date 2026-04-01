@@ -1,19 +1,16 @@
 package com.jowk.user.branch.entity;
 
+import com.jowk.common.domain.AggregateRoot;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import java.util.UUID;
+import lombok.*;
 
 @Entity
 @Table(name = "branches")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Branch {
+public class Branch implements AggregateRoot {
 
     @Id
     @Column(name = "branch_id")
@@ -25,13 +22,35 @@ public class Branch {
     @Enumerated(value = EnumType.STRING)
     private BranchType type;
 
+    @Column(name = "is_active")
+    private boolean isActive = false;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     public Branch(BranchType type, Address address) {
         this.type = type;
         this.address = address;
+        this.isActive = true;
+    }
+
+    public void deactivate() {
+        if (!this.isActive) {
+            throw new IllegalStateException("Branch is already inactive.");
+        }
+        this.isActive = false;
+    }
+
+    public void changeAddress(Address newAddress) {
+        if (newAddress == null) {
+            throw new IllegalArgumentException("Address cannot be null.");
+        }
+        this.address = newAddress;
     }
 
 }

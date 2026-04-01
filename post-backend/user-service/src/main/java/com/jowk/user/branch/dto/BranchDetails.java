@@ -5,11 +5,9 @@ import com.jowk.user.branch.entity.BranchType;
 import java.util.UUID;
 
 public record BranchDetails(
-
         UUID id,
         BranchType type,
         AddressSummary address
-
 ) {
 
     public static BranchDetails fromEntity(Branch branch) {
