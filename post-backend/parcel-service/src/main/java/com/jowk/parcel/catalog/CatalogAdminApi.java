@@ -19,7 +19,8 @@ public interface CatalogAdminApi {
             description = "Returns a full list of parcel types, including inactive/archived ones.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Parcel types were successfully returned")
+                    description = "Parcel types were successfully returned"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions")
     })
     @GetMapping("/types")
     ResponseEntity<ListResponse<ParcelTypeDetails>> getParcelTypes();
@@ -28,7 +29,8 @@ public interface CatalogAdminApi {
             description = "Returns a full list of available services like insurance or express delivery.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Additional services were successfully returned")
+                    description = "Additional services were successfully returned"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions")
     })
     @GetMapping("/additional-services")
     ResponseEntity<ListResponse<AdditionalServiceDetails>> getAdditionalServices();
@@ -62,7 +64,7 @@ public interface CatalogAdminApi {
     @Operation(summary = "Archive a parcel type",
             description = "Marks a parcel type as unavailable for customers. It remains in history.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Parcel was successfully archived"),
+            @ApiResponse(responseCode = "204", description = "Parcel type was successfully archived"),
             @ApiResponse(responseCode = "403", description = "Forbidden - insufficient permissions"),
             @ApiResponse(responseCode = "404", description = "Parcel type not found"),
             @ApiResponse(responseCode = "409", description = "Conflict - parcel type is already archived")

@@ -1,6 +1,7 @@
 package com.jowk.common.api.response;
 
 public enum ErrorCode {
-    ARCHIVED_RESOURCE_MODIFICATION,
-    RESOURCE_NOT_FOUND
+    RESOURCE_NOT_FOUND,
+    INVALID_ARGUMENT,
+    INVALID_STATE
 }

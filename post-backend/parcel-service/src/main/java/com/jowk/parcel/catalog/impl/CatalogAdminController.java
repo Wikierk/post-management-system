@@ -6,6 +6,7 @@ import com.jowk.parcel.catalog.CatalogUpdateService;
 import com.jowk.parcel.catalog.dto.*;
 import com.jowk.common.api.response.ListResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
@@ -34,7 +35,8 @@ public class CatalogAdminController implements CatalogAdminApi {
     public ResponseEntity<ParcelTypeSummary> createParcelType(
             CreateParcelTypeRequest request) {
         ParcelTypeSummary parcelType = updateService.createParcelType(request);
-        return ResponseEntity.ok(parcelType);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(parcelType);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class CatalogAdminController implements CatalogAdminApi {
     @Override
     public ResponseEntity<Void> archiveParcelType(Short typeId) {
         updateService.archiveParcelType(typeId);
-        return ResponseEntity.notFound()
+        return ResponseEntity.noContent()
                 .build();
     }
 
@@ -57,7 +59,8 @@ public class CatalogAdminController implements CatalogAdminApi {
             CreateAdditionalServiceRequest request) {
         AdditionalServiceSummary additionalService = updateService
                 .createAdditionalService(request);
-        return ResponseEntity.ok(additionalService);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(additionalService);
     }
 
     @Override
