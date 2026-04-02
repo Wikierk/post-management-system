@@ -1,22 +1,20 @@
 package com.jowk.parcel.core.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.domain.Persistable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "parcels")
 @Getter
-@Setter
-@NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Parcel implements Persistable<String> {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Parcel extends AbstractAggregateRoot<Parcel> implements Persistable<String> {
 
     @Id
     @Column(name = "tracking_number")
@@ -45,14 +43,25 @@ public class Parcel implements Persistable<String> {
     @JoinColumn(name = "parcel_type_snapshot_id")
     private ParcelTypeSnapshot parcelType;
 
-    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parcel", cascade = CascadeType.PERSIST)
     private Set<SelectedService> selectedServices = new HashSet<>();
-
-    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
-    private Set<ParcelHistory> history = new HashSet<>();
 
     @Transient
     private boolean isNew = true;
+
+    public Parcel(String trackingNumber, ParcelStatus status,
+                  BigDecimal totalPrice, BigDecimal cashOnDelivery,
+                  ParcelSubject sender, ParcelSubject recipient,
+                  ParcelTypeSnapshot parcelType, Collection<SelectedService> selectedServices) {
+        this.trackingNumber = trackingNumber;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.cashOnDelivery = cashOnDelivery;
+        this.sender = sender;
+        this.recipient = recipient;
+        this.parcelType = parcelType;
+        this.selectedServices = new HashSet<>(selectedServices);
+    }
 
     @Override
     public String getId() {
@@ -71,4 +80,3 @@ public class Parcel implements Persistable<String> {
     }
 
 }
-
