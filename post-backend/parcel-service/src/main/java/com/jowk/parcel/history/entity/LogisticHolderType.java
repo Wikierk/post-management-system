@@ -1,4 +1,4 @@
-package com.jowk.parcel.logistics;
+package com.jowk.parcel.history.entity;
 
 public enum LogisticHolderType {
     COURIER,
