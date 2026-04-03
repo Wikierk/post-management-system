@@ -47,7 +47,27 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().permitAll())
+                        .requestMatchers(
+                                "/register",
+                                "/login",
+                                "/v1/register",
+                                "/v1/login",
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/v1/auth/register",
+                                "/api/v1/auth/login",
+                                "/error"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/api/auth/v3/api-docs/**",
+                                "/v3/api-docs/**",
+                                "/api/auth/swagger-ui/**",
+                                "/swagger-ui/**",
+                                "/api/auth/swagger-ui.html",
+                                "/webjars/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
