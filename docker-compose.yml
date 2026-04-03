@@ -42,6 +42,7 @@ services:
       DB_PASSWORD: ${AUTH_SERVICE_DB_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       SPRING_RABBITMQ_HOST: rabbitmq
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     depends_on:
       auth-service-db:
         condition: service_started

@@ -1,5 +1,6 @@
 package com.jowk.auth.controller;
 
+import com.jowk.auth.dto.GoogleLoginRequest;
 import com.jowk.auth.dto.LoginRequest;
 import com.jowk.auth.dto.RegisterRequest;
 import com.jowk.auth.service.AuthService;
@@ -31,6 +32,17 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("{\"error\": \"Login failed: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @PostMapping("/oauth2/google")
+    public ResponseEntity<?> loginWithGoogle(@RequestBody @Valid GoogleLoginRequest request, HttpServletResponse response) {
+        try {
+            authService.loginWithGoogle(request, response);
+            return ResponseEntity.ok().body("{\"message\": \"Google login successful! Token saved in cookies.\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"error\": \"Google Login failed: " + e.getMessage() + "\"}");
         }
     }
 }
