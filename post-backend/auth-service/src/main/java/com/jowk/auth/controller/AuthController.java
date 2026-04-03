@@ -1,7 +1,9 @@
 package com.jowk.auth.controller;
 
+import com.jowk.auth.dto.LoginRequest;
 import com.jowk.auth.dto.RegisterRequest;
 import com.jowk.auth.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,17 @@ public class AuthController {
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
         authService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request, HttpServletResponse response) {
+        try {
+            authService.loginUser(request, response);
+            return ResponseEntity.ok().body("{\"message\": \"Login successful! Token saved in cookies.\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"error\": \"Login failed: " + e.getMessage() + "\"}");
+        }
     }
 }
 
