@@ -1,5 +1,6 @@
 package com.jowk.parcel.core.entity;
 
+import com.jowk.common.domain.valueobject.Money;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,8 +35,12 @@ public class ParcelTypeSnapshot {
     @Column(name = "max_length")
     private Short maxLength;
 
-    @Column(name = "price")
-    private BigDecimal price;
+    @Embedded
+    @AttributeOverride(
+            name = "amount",
+            column = @Column(name = "price")
+    )
+    private Money price;
 
     @Column(name = "description")
     private String description;

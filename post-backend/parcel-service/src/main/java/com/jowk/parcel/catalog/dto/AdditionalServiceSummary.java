@@ -16,7 +16,7 @@ public record AdditionalServiceSummary(
         return new AdditionalServiceSummary(
                 additionalService.getId(),
                 additionalService.getName(),
-                additionalService.getPrice()
+                additionalService.getPrice().toBigDecimal()
         );
     }
 

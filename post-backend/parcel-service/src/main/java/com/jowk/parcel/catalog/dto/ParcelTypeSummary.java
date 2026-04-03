@@ -18,7 +18,7 @@ public record ParcelTypeSummary(
     public static ParcelTypeSummary fromEntity(ParcelType parcelType) {
         return new ParcelTypeSummary(parcelType.getId(), parcelType.getMaxWeight(),
                 parcelType.getMaxWidth(), parcelType.getMaxHeight(),
-                parcelType.getMaxLength(), parcelType.getPrice(),
+                parcelType.getMaxLength(), parcelType.getPrice().toBigDecimal(),
                 parcelType.getDescription());
     }
 

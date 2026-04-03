@@ -17,7 +17,7 @@ public record AdditionalServiceDetails(
         return new AdditionalServiceDetails(
                 additionalService.getId(),
                 additionalService.getName(),
-                additionalService.getPrice(),
+                additionalService.getPrice().toBigDecimal(),
                 additionalService.isAvailable()
         );
     }

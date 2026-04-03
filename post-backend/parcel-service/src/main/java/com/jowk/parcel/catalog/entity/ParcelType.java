@@ -1,6 +1,7 @@
 package com.jowk.parcel.catalog.entity;
 
 import com.jowk.common.domain.AggregateRoot;
+import com.jowk.common.domain.valueobject.Money;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -30,8 +31,12 @@ public class ParcelType implements AggregateRoot {
     @Column(name = "max_length")
     private short maxLength;
 
-    @Column(name = "price")
-    private BigDecimal price;
+    @Embedded
+    @AttributeOverride(
+            name = "amount",
+            column = @Column(name = "price")
+    )
+    private Money price;
 
     @Column(name = "description")
     private String description;
@@ -44,7 +49,7 @@ public class ParcelType implements AggregateRoot {
     private Long version;
 
     public ParcelType(BigDecimal maxWeight, short maxWidth, short maxHeight,
-            short maxLength, BigDecimal price, String description) {
+            short maxLength, Money price, String description) {
         validateMaxWeight(maxWeight);
         validateMaxWidth(maxWidth);
         validateMaxHeight(maxHeight);
@@ -84,7 +89,7 @@ public class ParcelType implements AggregateRoot {
         this.maxLength = newMaxLength;
     }
 
-    public void changePrice(BigDecimal newPrice) {
+    public void changePrice(Money newPrice) {
         validateNotArchived();
         validatePrice(newPrice);
         this.price = newPrice;
@@ -136,11 +141,11 @@ public class ParcelType implements AggregateRoot {
         }
     }
 
-    private void validatePrice(BigDecimal price) {
+    private void validatePrice(Money price) {
         if (price == null) {
             throw new IllegalArgumentException("Price cannot be null.");
         }
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
+        if (price.compareTo(Money.zero()) < 0) {
             throw new IllegalArgumentException("Price cannot be negative.");
         }
     }

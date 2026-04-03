@@ -19,7 +19,7 @@ public record ParcelTypeDetails(
     public static ParcelTypeDetails fromEntity(ParcelType parcelType) {
         return new ParcelTypeDetails(parcelType.getId(), parcelType.getMaxWeight(),
                 parcelType.getMaxWidth(), parcelType.getMaxHeight(),
-                parcelType.getMaxLength(), parcelType.getPrice(),
+                parcelType.getMaxLength(), parcelType.getPrice().toBigDecimal(),
                 parcelType.getDescription(), parcelType.isAvailable());
     }
 

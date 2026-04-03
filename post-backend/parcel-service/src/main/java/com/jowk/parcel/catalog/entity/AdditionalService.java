@@ -1,9 +1,9 @@
 package com.jowk.parcel.catalog.entity;
 
 import com.jowk.common.domain.AggregateRoot;
+import com.jowk.common.domain.valueobject.Money;
 import jakarta.persistence.*;
 import lombok.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "additional_services")
@@ -21,8 +21,12 @@ public class AdditionalService implements AggregateRoot {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
-    private BigDecimal price;
+    @Embedded
+    @AttributeOverride(
+            name = "amount",
+            column = @Column(name = "price")
+    )
+    private Money price;
 
     @Column(name = "is_available")
     private boolean isAvailable;
@@ -31,7 +35,7 @@ public class AdditionalService implements AggregateRoot {
     @Column(name = "version")
     private Long version;
 
-    public AdditionalService(String name, BigDecimal price) {
+    public AdditionalService(String name, Money price) {
         validateName(name);
         validatePrice(price);
         this.name = name;
@@ -45,7 +49,7 @@ public class AdditionalService implements AggregateRoot {
         this.name = newName;
     }
 
-    public void changePrice(BigDecimal newPrice) {
+    public void changePrice(Money newPrice) {
         validateNotArchived();
         validatePrice(newPrice);
         this.price = newPrice;
@@ -64,11 +68,11 @@ public class AdditionalService implements AggregateRoot {
         }
     }
 
-    private void validatePrice(BigDecimal price) {
+    private void validatePrice(Money price) {
         if (price == null) {
             throw new IllegalArgumentException("Price cannot be null.");
         }
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
+        if (price.compareTo(Money.zero()) < 0) {
             throw new IllegalArgumentException("Price cannot be negative.");
         }
     }

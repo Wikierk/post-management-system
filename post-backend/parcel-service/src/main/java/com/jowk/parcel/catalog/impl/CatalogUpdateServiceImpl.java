@@ -1,5 +1,6 @@
 package com.jowk.parcel.catalog.impl;
 
+import com.jowk.common.domain.valueobject.Money;
 import com.jowk.parcel.catalog.AdditionalServiceRepository;
 import com.jowk.parcel.catalog.CatalogUpdateService;
 import com.jowk.parcel.catalog.ParcelTypeRepository;
@@ -22,7 +23,7 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
     @Override
     public ParcelTypeSummary createParcelType(CreateParcelTypeRequest request) {
         ParcelType type = new ParcelType(request.maxWeight(), request.maxWidth(),
-                request.maxHeight(), request.maxLength(), request.price(),
+                request.maxHeight(), request.maxLength(), Money.of(request.price()),
                 request.description());
         ParcelType createdType = parcelTypeRepository.save(type);
         return ParcelTypeSummary.fromEntity(createdType);
@@ -38,7 +39,7 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
         if (request.maxWidth() != null) type.changeMaxWidth(request.maxWidth());
         if (request.maxHeight() != null) type.changeMaxHeight(request.maxHeight());
         if (request.maxLength() != null) type.changeMaxLength(request.maxLength());
-        if (request.price() != null) type.changePrice(request.price());
+        if (request.price() != null) type.changePrice(Money.of(request.price()));
         if (request.description() != null) type.changeDescription(request.description());
         return ParcelTypeSummary.fromEntity(type);
     }
@@ -55,7 +56,7 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
     public AdditionalServiceSummary createAdditionalService(
             CreateAdditionalServiceRequest request) {
         AdditionalService service = new AdditionalService(
-                request.name(), request.price());
+                request.name(), Money.of(request.price()));
         AdditionalService createdService = additionalServiceRepository.save(service);
         return AdditionalServiceSummary.fromEntity(createdService);
     }
@@ -67,7 +68,7 @@ public class CatalogUpdateServiceImpl implements CatalogUpdateService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Additional service of given ID was not found."));
         if (request.name() != null) service.changeName(request.name());
-        if (request.price() != null) service.changePrice(request.price());
+        if (request.price() != null) service.changePrice(Money.of(request.price()));
         return AdditionalServiceSummary.fromEntity(service);
     }
 

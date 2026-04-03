@@ -1,11 +1,11 @@
 package com.jowk.parcel.core.entity;
 
+import com.jowk.common.domain.valueobject.Money;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -25,8 +25,12 @@ public class SelectedService {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
-    private BigDecimal price;
+    @Embedded
+    @AttributeOverride(
+            name = "amount",
+            column = @Column(name = "price")
+    )
+    private Money price;
 
     @Column(name = "additional_service_id")
     private Short additionalServiceId;
