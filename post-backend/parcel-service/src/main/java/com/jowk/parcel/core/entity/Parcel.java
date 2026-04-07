@@ -1,7 +1,9 @@
 package com.jowk.parcel.core.entity;
 
+import com.jowk.common.domain.AggregateRoot;
 import com.jowk.common.domain.valueobject.Money;
 import com.jowk.parcel.history.entity.LogisticHolder;
+import com.jowk.parcel.history.entity.LogisticHolderType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -18,7 +20,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class Parcel extends AbstractAggregateRoot<Parcel> implements Persistable<String> {
+public class Parcel extends AbstractAggregateRoot<Parcel>
+        implements Persistable<String>, AggregateRoot {
 
     @Id
     @Column(name = "tracking_number")
@@ -118,10 +121,10 @@ public class Parcel extends AbstractAggregateRoot<Parcel> implements Persistable
                 ParcelStatus.AVAILABLE_FOR_PICKUP);
     }
 
-    public void markAsDelivered(String description, UUID actorId,
-            LogisticHolder logisticHolder) {
+    public void markAsDelivered(String description, UUID actorId) {
         transitionTo(ParcelStatus.DELIVERED, description, actorId,
-                logisticHolder, ParcelStatus.OUT_FOR_DELIVERY);
+                new LogisticHolder(null, LogisticHolderType.RECIPIENT),
+                ParcelStatus.OUT_FOR_DELIVERY);
     }
 
     public void markAsDeliveryAttempted(String description, UUID actorId,

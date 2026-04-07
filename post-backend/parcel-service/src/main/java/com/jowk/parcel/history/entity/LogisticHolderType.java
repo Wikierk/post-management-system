@@ -4,5 +4,6 @@ public enum LogisticHolderType {
     COURIER,
     WAREHOUSE,
     POST_OFFICE,
-    CLIENT
+    CLIENT,
+    RECIPIENT
 }

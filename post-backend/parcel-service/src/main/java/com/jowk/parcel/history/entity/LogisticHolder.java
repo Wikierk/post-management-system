@@ -23,15 +23,16 @@ public class LogisticHolder {
     private LogisticHolderType type;
 
     public LogisticHolder(UUID id, LogisticHolderType type) {
-        validateId(id);
         validateType(type);
+        validateId(id, type);
         this.id = id;
         this.type = type;
     }
 
-    private void validateId(UUID id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Logistic holder ID cannot be null.");
+    private void validateId(UUID id, LogisticHolderType type) {
+        if (id == null && type != LogisticHolderType.RECIPIENT) {
+            throw new IllegalArgumentException("Logistic holder ID cannot be " +
+                    "null unless holder type is RECIPIENT.");
         }
     }
 
