@@ -9,9 +9,10 @@ import api from "../api/axiosConfig";
 import type { User } from "../types/User";
 
 interface AuthContextType {
+  isAuthenticated: boolean;
   user: User | null;
   isLoading: boolean;
-  login: (token: string) => Promise<void>;
+  login: () => Promise<void>;
   logout: () => void;
 }
 
@@ -32,43 +33,48 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem("jwt_token");
-      if (token) {
-        try {
-          const response = await api.get<User>("/users/me");
-          setUser(response.data);
-        } catch (error) {
-          console.error("Błąd autoryzacji, token wygasł lub jest nieważny");
-          localStorage.removeItem("jwt_token");
-        }
+    const checkSession = async () => {
+      try {
+        // const response = await api.get("/v1/users/me");
+        // setUser(response.data);
+
+        setIsAuthenticated(true);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
-    checkAuth();
+    checkSession();
   }, []);
+  const login = async () => {
+    setIsAuthenticated(true);
 
-  const login = async (token: string) => {
-    localStorage.setItem("jwt_token", token);
     try {
-      const response = await api.get<User>("/users/me");
-      setUser(response.data);
-    } catch (error) {
-      localStorage.removeItem("jwt_token");
-      throw new Error("Nie udało się pobrać profilu po zalogowaniu");
+      //const userProfile = await api.get("/user/me");
+      //setUser(userProfile.data);
+    } catch (e) {}
+  };
+
+  const logout = async () => {
+    try {
+      // await api.post('/auth/logout');
+    } finally {
+      setIsAuthenticated(false);
+      setUser(null);
+      // Zamiast nawigacji w kontekście, lepiej zrobić to po wykonaniu akcji wstawiając w komponencie: navigate('/login')
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("jwt_token");
-    setUser(null);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
