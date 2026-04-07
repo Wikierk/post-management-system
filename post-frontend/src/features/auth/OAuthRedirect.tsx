@@ -22,7 +22,7 @@ export const OAuthRedirect = () => {
 
       if (token) {
         try {
-          await login(token);
+          await login();
           navigate("/dashboard", { replace: true });
         } catch (err) {
           setError("Nie udało się zweryfikować Twojego konta po logowaniu.");

@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { CircularProgress, Box } from "@mui/material";
 
 export const ProtectedRoute = () => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthenticated } = useAuth();
 
   if (isLoading) {
     return (
@@ -18,7 +18,7 @@ export const ProtectedRoute = () => {
     );
   }
 
-  if (!user) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
