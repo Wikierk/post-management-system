@@ -3,6 +3,7 @@ package com.jowk.parcel.core.impl;
 import com.jowk.common.domain.exception.EntityNotFoundException;
 import com.jowk.parcel.core.ParcelRepository;
 import com.jowk.parcel.core.ParcelService;
+import com.jowk.parcel.core.dto.DispatchToCourierRequest;
 import com.jowk.parcel.core.dto.ParcelStatusChangeRequest;
 import com.jowk.parcel.core.entity.Parcel;
 import com.jowk.parcel.history.entity.LogisticHolder;
@@ -47,11 +48,11 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public void markAsInTransit(String trackingNumber, UUID clerkId,
-            UUID courierId, ParcelStatusChangeRequest request) {
+    public void markAsInTransit(String trackingNumber,
+            UUID clerkId, DispatchToCourierRequest request) {
         Parcel parcel = getParcelOrThrow(trackingNumber);
-        parcel.markAsInTransit(descriptionOf(request), clerkId,
-                new LogisticHolder(courierId, LogisticHolderType.COURIER));
+        parcel.markAsInTransit(request.description(), clerkId,
+                new LogisticHolder(request.courierId(), LogisticHolderType.COURIER));
         parcelRepository.save(parcel);
     }
 
@@ -66,10 +67,11 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public void markAsOutForDelivery(String trackingNumber, UUID clerkId,
-            UUID courierId, ParcelStatusChangeRequest request) {
+            DispatchToCourierRequest request) {
         Parcel parcel = getParcelOrThrow(trackingNumber);
-        parcel.markAsOutForDelivery(descriptionOf(request),
-                clerkId, new LogisticHolder(courierId, LogisticHolderType.COURIER));
+        parcel.markAsOutForDelivery(request.description(),
+                clerkId, new LogisticHolder(
+                        request.courierId(), LogisticHolderType.COURIER));
         parcelRepository.save(parcel);
     }
 
