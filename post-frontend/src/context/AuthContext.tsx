@@ -12,7 +12,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   isLoading: boolean;
-  login: () => Promise<void>;
+  checkSession: () => Promise<User | null>;
+  login: () => Promise<User | null>;
   logout: () => void;
 }
 
@@ -35,30 +36,50 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        // const response = await api.get("/v1/users/me");
-        // setUser(response.data);
-
-        setIsAuthenticated(true);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkSession();
-  }, []);
-  const login = async () => {
-    setIsAuthenticated(true);
-
+  const checkSession = async (
+    retries = 3,
+    delayMs = 500,
+  ): Promise<User | null> => {
+    setIsLoading(true);
     try {
-      //const userProfile = await api.get("/user/me");
-      //setUser(userProfile.data);
-    } catch (e) {}
+      const response = await api.get<User>("/users/v3/me");
+      setUser(response.data);
+      setIsAuthenticated(true);
+      return response.data;
+    } catch (error: any) {
+      const status = error.response?.status;
+      const shouldRetry = retries > 0 && (status === 404 || status === 500);
+
+      if (shouldRetry) {
+        console.warn(
+          `User fetch failed (${status}), retrying in ${delayMs}ms... (${retries} retries left)`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        return checkSession(retries - 1, delayMs * 1.5); // Exponential backoff
+      }
+
+      setIsAuthenticated(false);
+      setUser(null);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      checkSession();
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+  const login = async (): Promise<User | null> => {
+    const userData = await checkSession();
+    if (!userData) {
+      console.error("Login session check failed");
+    }
+    return userData;
   };
 
   const logout = async () => {
@@ -67,13 +88,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsAuthenticated(false);
       setUser(null);
-      // Zamiast nawigacji w kontekście, lepiej zrobić to po wykonaniu akcji wstawiając w komponencie: navigate('/login')
     }
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, isLoading, login, logout }}
+      value={{ isAuthenticated, user, isLoading, checkSession, login, logout }}
     >
       {children}
     </AuthContext.Provider>

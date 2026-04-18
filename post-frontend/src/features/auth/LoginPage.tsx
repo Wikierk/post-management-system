@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Card, CardContent, Alert, Divider } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
+import { hasRole } from "../../types/User";
 import { LoginHeader } from "../../components/LoginHeader";
 import { LoginForm } from "../../components/LoginForm";
 import { LoginFooter } from "../../components/LoginFooter";
@@ -29,8 +30,13 @@ export const LoginPage = () => {
     try {
       await api.post("/auth/v1/login", { email, password });
 
-      await login();
-      navigate("/dashboard", { replace: true });
+      const user = await login();
+
+      if (hasRole(user, "ADMIN")) {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
     } catch (err: any) {
       console.error("Błąd logowania:", err);
       if (err.response && err.response.status === 401) {
@@ -51,8 +57,13 @@ export const LoginPage = () => {
         id_token: tokenResponse.credential,
       });
 
-      await login();
-      navigate("/dashboard", { replace: true });
+      const user = await login();
+
+      if (hasRole(user, "ADMIN")) {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
     } catch (err: any) {
       console.error("Błąd logowania Google:", err);
       setError("Logowanie przez Google nie powiodło się.");

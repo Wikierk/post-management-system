@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/admin/branches")
+@RequestMapping("/v3/admin/branches")
 @RequiredArgsConstructor
 @Tag(name = "Admin Branch Management", description = "Endpoints for managing post offices and warehouses")
 public class AdminBranchController {

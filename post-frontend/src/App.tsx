@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LoginPage } from "./features/auth/LoginPage";
 import { DashboardPage } from "./features/parcels/DashboardPage";
+import { AdminDashboardPage } from "./features/admin/AdminDashboardPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { RegisterPage } from "./features/auth/RegisterPage";
 
@@ -21,6 +22,10 @@ export const App = () => {
 
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
+
+            <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
+              <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/admin/users")
+@RequestMapping("/v3/admin/users")
 @RequiredArgsConstructor
 @Tag(name = "Admin User Management", description = "Endpoints for managing users by administrators")
 public class AdminUserController {

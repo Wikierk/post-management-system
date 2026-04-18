@@ -42,8 +42,12 @@ export const DashboardPage = () => {
             </Button>
           </Box>
 
-          <Box sx={{ mb: 4, p: 3, bgcolor: "primary.50", borderRadius: 2 }}>
-            <Typography variant="h6" color="primary.main" gutterBottom>
+          <Box sx={{ mb: 4, p: 3, bgcolor: "grey.100", borderRadius: 2 }}>
+            <Typography
+              variant="h6"
+              sx={{ color: "primary.main" }}
+              gutterBottom
+            >
               Sukces! Jesteś zalogowany.
             </Typography>
           </Box>
@@ -58,6 +62,8 @@ export const DashboardPage = () => {
                   background: "#f5f5f5",
                   padding: "10px",
                   borderRadius: "4px",
+                  color: "#333",
+                  fontSize: "14px",
                 }}
               >
                 {JSON.stringify(user, null, 2)}
