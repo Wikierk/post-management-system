@@ -1,7 +1,6 @@
-package com.jowk.user.branch;
+package com.jowk.user.branch.entity;
 
 import com.jowk.common.domain.AggregateRepository;
-import com.jowk.user.branch.entity.Branch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
