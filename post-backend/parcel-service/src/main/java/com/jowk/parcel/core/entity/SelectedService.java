@@ -2,17 +2,17 @@ package com.jowk.parcel.core.entity;
 
 import com.jowk.common.domain.valueobject.Money;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "selected_services")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class SelectedService {
 
@@ -38,5 +38,28 @@ public class SelectedService {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tracking_number")
     private Parcel parcel;
+
+    public SelectedService(String name, Money price, Short additionalServiceId) {
+        this.name = requireNotBlank(name, "name cannot be blank");
+        this.price = Objects.requireNonNull(price, "price cannot be null");
+        this.additionalServiceId = requirePositive(additionalServiceId,
+                "additionalServiceId must be positive");
+    }
+
+    private String requireNotBlank(String value, String message) {
+        Objects.requireNonNull(value, message);
+        if (value.isBlank()) {
+            throw new IllegalArgumentException(message);
+        }
+        return value;
+    }
+
+    private Short requirePositive(Short value, String message) {
+        Objects.requireNonNull(value, message);
+        if (value <= 0) {
+            throw new IllegalArgumentException(message);
+        }
+        return value;
+    }
 
 }

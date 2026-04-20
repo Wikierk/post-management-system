@@ -1,17 +1,14 @@
 package com.jowk.parcel.core.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "parcel_subjects")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ParcelSubject {
 
@@ -41,5 +38,36 @@ public class ParcelSubject {
 
     @Column(name = "user_id")
     private UUID userId;
+
+    public ParcelSubject(String fullName, String street, String city,
+            String zipCode, String email, String phone) {
+        this(fullName, street, city, zipCode, email, phone, null);
+    }
+
+    public ParcelSubject(String fullName, String street, String city,
+            String zipCode, String email, String phone, UUID userId) {
+        this.fullName = requireNotBlank(fullName, "fullName cannot be blank");
+        this.street = requireNotBlank(street, "street cannot be blank");
+        this.city = requireNotBlank(city, "city cannot be blank");
+        this.zipCode = requireNotBlank(zipCode, "zipCode cannot be blank");
+        this.email = normalizeOptional(email);
+        this.phone = normalizeOptional(phone);
+        this.userId = userId;
+    }
+
+    private String requireNotBlank(String value, String message) {
+        Objects.requireNonNull(value, message);
+        if (value.isBlank()) {
+            throw new IllegalArgumentException(message);
+        }
+        return value;
+    }
+
+    private String normalizeOptional(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return value;
+    }
 
 }
