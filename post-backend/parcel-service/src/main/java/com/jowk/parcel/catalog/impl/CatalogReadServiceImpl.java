@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,21 @@ public class CatalogReadServiceImpl implements CatalogReadService {
         return additionalServiceRepository.findAll()
                 .stream()
                 .map(AdditionalServiceDetails::fromEntity)
+                .toList();
+    }
+
+    @Override
+    public ParcelTypeSummary getParcelTypeById(Short id) {
+        return parcelTypeRepository.findById(id)
+                .map(ParcelTypeSummary::fromEntity)
+                .orElseThrow(() -> new IllegalArgumentException("Parcel type with id " + id + " not found"));
+    }
+
+    @Override
+    public List<AdditionalServiceSummary> getAdditionalServicesByIds(Set<Short> ids) {
+        return additionalServiceRepository.findAllByIdInAndIsAvailableTrue(ids)
+                .stream()
+                .map(AdditionalServiceSummary::fromEntity)
                 .toList();
     }
 
