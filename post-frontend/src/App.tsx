@@ -1,29 +1,33 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { OAuthRedirect } from "./features/auth/OAuthRedirect";
 import { LoginPage } from "./features/auth/LoginPage";
 import { DashboardPage } from "./features/parcels/DashboardPage";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { RegisterPage } from "./features/auth/RegisterPage";
 
 export const App = () => {
+  const googleClientId =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+    "TWOJ_KLUCZ_Z_BACKENDU.apps.googleusercontent.com";
+
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/oauth2/redirect" element={<OAuthRedirect />} />
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+            </Route>
 
-            {/* <Route path="/parcels/new" element={<CreateParcelPage />} /> */}
-            {/* <Route path="/admin" element={<AdminDashboard />} /> */}
-          </Route>
-
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 };
 

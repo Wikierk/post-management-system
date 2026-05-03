@@ -1,5 +1,4 @@
 services:
-
   api-gateway:
     build:
       context: ./post-backend/api-gateway
@@ -23,7 +22,7 @@ services:
     image: postgres:latest
     networks:
       - app-network
-    ports: # only for testing, database should not be accessed from public network  
+    ports: # only for testing, database should not be accessed from public network
       - "6002:5432"
     environment:
       POSTGRES_DB: ${AUTH_SERVICE_DB_NAME}
@@ -42,20 +41,25 @@ services:
       DB_USER: ${AUTH_SERVICE_DB_USER}
       DB_PASSWORD: ${AUTH_SERVICE_DB_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      SPRING_RABBITMQ_HOST: rabbitmq
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     depends_on:
-      - auth-service-db
-      
+      auth-service-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
   user-service-db:
     image: postgres:latest
     networks:
       - app-network
-    ports: # only for testing, database should not be accessed from public network  
+    ports: # only for testing, database should not be accessed from public network
       - "6001:5432"
     environment:
       POSTGRES_DB: ${USER_SERVICE_DB_NAME}
       POSTGRES_USER: ${USER_SERVICE_DB_USER}
       POSTGRES_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
-      
+
   user-service:
     build:
       context: ./post-backend/user-service
@@ -68,14 +72,18 @@ services:
       DB_USER: ${USER_SERVICE_DB_USER}
       DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      SPRING_RABBITMQ_HOST: rabbitmq
     depends_on:
-      - user-service-db
-      
+      user-service-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
   parcel-service-db:
     image: postgres:latest
     networks:
       - app-network
-    ports: # only for testing, database should not be accessed from public network  
+    ports: # only for testing, database should not be accessed from public network
       - "6003:5432"
     environment:
       POSTGRES_DB: ${PARCEL_SERVICE_DB_NAME}
@@ -94,8 +102,25 @@ services:
       DB_USER: ${PARCEL_SERVICE_DB_USER}
       DB_PASSWORD: ${PARCEL_SERVICE_DB_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      SPRING_RABBITMQ_HOST: rabbitmq
     depends_on:
-      - parcel-service-db
+      parcel-service-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672" # Port aplikacji
+      - "15672:15672" # Panel zarządzania (login/hasło: guest/guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
 
 networks:
   app-network:

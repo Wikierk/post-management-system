@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Box, Card, CardContent, Alert } from "@mui/material";
+import { Box, Card, CardContent, Alert, Divider } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { LoginHeader } from "../../components/LoginHeader";
 import { LoginForm } from "../../components/LoginForm";
-import { OAuthButtons } from "../../components/OAuthButtons";
 import { LoginFooter } from "../../components/LoginFooter";
-import { Divider } from "@mui/material";
 import api from "../../api/axiosConfig";
+import { GoogleLogin } from "@react-oauth/google";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -28,16 +27,9 @@ export const LoginPage = () => {
     setError(null);
 
     try {
-      const response = await api.post("/auth/login", { email, password });
+      await api.post("/auth/v1/login", { email, password });
 
-      const { token } = response.data;
-
-      if (!token) {
-        throw new Error("Brak tokenu w odpowiedzi serwera");
-      }
-
-      await login(token);
-
+      await login();
       navigate("/dashboard", { replace: true });
     } catch (err: any) {
       console.error("Błąd logowania:", err);
@@ -51,10 +43,22 @@ export const LoginPage = () => {
     }
   };
 
-  const handleOAuthLogin = (provider: "google") => {
-    const backendUrl =
-      import.meta.env.VITE_API_URL || "http://localhost:8080/api";
-    window.location.href = `${backendUrl}/oauth2/authorization/${provider}`;
+  const handleGoogleSuccess = async (tokenResponse: any) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await api.post("/auth/v1/oauth2/google", {
+        id_token: tokenResponse.credential,
+      });
+
+      await login();
+      navigate("/dashboard", { replace: true });
+    } catch (err: any) {
+      console.error("Błąd logowania Google:", err);
+      setError("Logowanie przez Google nie powiodło się.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -76,7 +80,7 @@ export const LoginPage = () => {
         <CardContent sx={{ p: 4 }}>
           {(error || urlError) && (
             <Alert severity="error" sx={{ mb: 3 }}>
-              {error || "Wystąpił problem podczas logowania (OAuth)."}
+              {error || "Wystąpił problem podczas logowania."}
             </Alert>
           )}
 
@@ -92,10 +96,13 @@ export const LoginPage = () => {
           <Divider sx={{ my: 3, typography: "body2", color: "text.secondary" }}>
             LUB
           </Divider>
-
-          <OAuthButtons isLoading={isLoading} onOAuthLogin={handleOAuthLogin} />
+          <Box display="flex" justifyContent="center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError("Błąd inicjalizacji okna Google")}
+            />
+          </Box>
         </CardContent>
-
         <LoginFooter />
       </Card>
     </Box>
