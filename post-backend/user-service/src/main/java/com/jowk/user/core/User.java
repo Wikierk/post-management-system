@@ -1,5 +1,6 @@
 package com.jowk.user.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -42,6 +43,7 @@ public class User implements Persistable<UUID> {
     @Column(name = "last_name")
     private String lastName;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "owner_id")
     private Set<SavedRecipient> savedRecipients = new HashSet<>();

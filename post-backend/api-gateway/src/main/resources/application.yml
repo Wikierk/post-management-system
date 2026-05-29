@@ -34,18 +34,6 @@ spring:
             - Path=/api/admin/parcels/**
           filters:
             - RewritePath=/api/admin/parcels/?(?<segment>.*), /$\{segment}
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:5173"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders: "*"
-            allowCredentials: true
 
 springdoc:
   server:

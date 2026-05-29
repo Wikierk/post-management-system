@@ -1,8 +1,15 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { hasRole } from "../types/User";
 import { CircularProgress, Box } from "@mui/material";
 
-export const ProtectedRoute = () => {
+interface ProtectedRouteProps {
+  requiredRole?: string;
+}
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  requiredRole,
+}) => {
   const { user, isLoading, isAuthenticated } = useAuth();
 
   if (isLoading) {
@@ -20,6 +27,10 @@ export const ProtectedRoute = () => {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && !hasRole(user, requiredRole)) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <Outlet />;
