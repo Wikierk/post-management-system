@@ -8,6 +8,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { RegisterPage } from "./features/auth/RegisterPage";
 import { TrackingPage } from "./features/parcels/TrackingPage";
 import { CreateParcelPage } from "./features/parcels/CreateParcelPage";
+import { MyParcelsPage } from "./features/parcels/MyParcelsPage";
 
 export const App = () => {
   const googleClientId =
@@ -29,6 +30,7 @@ export const App = () => {
 
             <Route element={<ProtectedRoute requiredRole="CUSTOMER" />}>
               <Route path="/dashboard/new-shipment" element={<CreateParcelPage />} />
+              <Route path="/dashboard/parcels" element={<MyParcelsPage />} />
             </Route>
 
             <Route element={<ProtectedRoute requiredRole="ADMIN" />}>

@@ -6,5 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ParcelRepository extends
-        AggregateRepository<Parcel, String> { }
+                AggregateRepository<Parcel, String> {
+
+        java.util.List<Parcel> findAllBySenderUserId(java.util.UUID userId);
+
+}
+
 

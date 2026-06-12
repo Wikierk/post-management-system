@@ -19,6 +19,10 @@ export const DashboardPage = () => {
     navigate("/tracking");
   };
 
+  const openMyParcels = () => {
+    navigate("/dashboard/parcels");
+  };
+
   return (
     <Box
       sx={{
@@ -85,6 +89,9 @@ export const DashboardPage = () => {
             </Button>
             <Button variant="outlined" onClick={openTracking}>
               Sprawdź tracking
+            </Button>
+            <Button variant="outlined" onClick={openMyParcels}>
+              Moje przesyłki
             </Button>
           </Box>
         </Paper>

@@ -190,6 +190,27 @@ export const CreateParcelPage = () => {
     }
   };
 
+  const handleSimulatePayment = async () => {
+    if (!success) return;
+    setError(null);
+    try {
+      const checkout = await api.post<{ paymentId: string; checkoutUrl: string }>(
+        "/payments/checkout",
+        { trackingNumber: success.trackingNumber },
+      );
+
+      // Immediately confirm (simulation)
+      await api.post(`/payments/${checkout.data.paymentId}/confirm`);
+
+      setSuccess((prev) => prev ? { ...prev, totalPrice: prev.totalPrice } : prev);
+      setError(null);
+      alert("Płatność zasymulowana i potwierdzona.");
+    } catch (err) {
+      console.error(err);
+      setError("Wystąpił błąd przy symulacji płatności.");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -223,6 +244,14 @@ export const CreateParcelPage = () => {
             <Alert severity="success" action={<Button color="inherit" size="small" onClick={() => navigate("/tracking")}>Śledź</Button>}>
               Przesyłka nadana. Numer: {success.trackingNumber}
             </Alert>
+          )}
+
+          {success && (
+            <Box sx={{ mt: 2 }}>
+              <Button variant="contained" color="secondary" onClick={handleSimulatePayment}>
+                Zapłać (symulacja)
+              </Button>
+            </Box>
           )}
 
           <Card elevation={4} sx={{ borderRadius: 4 }}>
