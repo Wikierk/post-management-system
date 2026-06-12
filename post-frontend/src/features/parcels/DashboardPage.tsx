@@ -11,6 +11,14 @@ export const DashboardPage = () => {
     navigate("/login");
   };
 
+  const openNewShipment = () => {
+    navigate("/dashboard/new-shipment");
+  };
+
+  const openTracking = () => {
+    navigate("/tracking");
+  };
+
   return (
     <Box
       sx={{
@@ -70,6 +78,15 @@ export const DashboardPage = () => {
               </pre>
             </Box>
           )}
+
+          <Box sx={{ mt: 4, display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <Button variant="contained" onClick={openNewShipment}>
+              Nadaj przesyłkę
+            </Button>
+            <Button variant="outlined" onClick={openTracking}>
+              Sprawdź tracking
+            </Button>
+          </Box>
         </Paper>
       </Container>
     </Box>

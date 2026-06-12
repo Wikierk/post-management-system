@@ -73,12 +73,21 @@ public class Parcel extends AbstractAggregateRoot<Parcel>
             Collection<SelectedService> selectedServices) {
         this.trackingNumber = UUID.randomUUID().toString();
         this.status = ParcelStatus.REGISTERED;
-        this.cashOnDelivery = requireNonNull(cashOnDelivery, "cashOnDelivery cannot be null");
+        this.cashOnDelivery = cashOnDelivery;
         this.sender = requireNonNull(sender, "sender cannot be null");
         this.recipient = requireNonNull(recipient, "recipient cannot be null");
         this.parcelType = requireNonNull(parcelType, "parcelType cannot be null");
         this.selectedServices = toSelectedServicesSet(selectedServices);
+        this.selectedServices.forEach(selectedService -> selectedService.attachToParcel(this));
         this.totalPrice = calculateTotalPrice(this.parcelType, this.selectedServices);
+    }
+
+    public void registerAsCreated(String description, UUID actorId,
+            LogisticHolder logisticHolder) {
+        requireNonNull(actorId, "actorId cannot be null");
+        requireNonNull(logisticHolder, "logisticHolder cannot be null");
+        registerEvent(new ParcelStatusChangedEvent(this.trackingNumber,
+                this.status, normalizeDescription(description), actorId, logisticHolder));
     }
 
     public void markAsPaid(String description, UUID actorId,

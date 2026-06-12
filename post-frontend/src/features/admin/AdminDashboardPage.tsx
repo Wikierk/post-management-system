@@ -21,6 +21,7 @@ import api from "../../api/axiosConfig";
 import CustomTabPanel from "../../components/CustomTabPanel";
 import UsersTable from "../../components/UsersTable";
 import BranchesTable from "../../components/BranchesTable";
+import { CatalogManagementPanel } from "./CatalogManagementPanel";
 import type { AdminUser } from "../../types/AdminUser";
 import type { Branch } from "../../types/Branch";
 
@@ -295,6 +296,7 @@ export function AdminDashboardPage() {
             <Tabs value={tabValue} onChange={handleTabChange} centered>
               <Tab label="Użytkownicy" />
               <Tab label="Placówki (Oddziały/Sortownie)" />
+              <Tab label="Cennik i usługi" />
             </Tabs>
           </Box>
 
@@ -323,6 +325,10 @@ export function AdminDashboardPage() {
                 onCreateBranch={openCreateBranchDialog}
                 onEditBranch={openEditBranchDialog}
               />
+            </CustomTabPanel>
+
+            <CustomTabPanel value={tabValue} index={2}>
+              <CatalogManagementPanel />
             </CustomTabPanel>
           </Box>
         </Paper>

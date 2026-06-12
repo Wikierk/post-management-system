@@ -19,7 +19,6 @@ public class SelectedService {
     @Id
     @Column(name = "selected_service_id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    @EqualsAndHashCode.Include
     private UUID id;
 
     @Column(name = "name")
@@ -33,6 +32,7 @@ public class SelectedService {
     private Money price;
 
     @Column(name = "additional_service_id")
+        @EqualsAndHashCode.Include
     private Short additionalServiceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,6 +44,10 @@ public class SelectedService {
         this.price = Objects.requireNonNull(price, "price cannot be null");
         this.additionalServiceId = requirePositive(additionalServiceId,
                 "additionalServiceId must be positive");
+    }
+
+    void attachToParcel(Parcel parcel) {
+        this.parcel = parcel;
     }
 
     private String requireNotBlank(String value, String message) {

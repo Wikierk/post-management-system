@@ -1,11 +1,15 @@
 package com.jowk.parcel.core;
 
 import com.jowk.parcel.core.dto.DispatchToCourierRequest;
+import com.jowk.parcel.core.dto.CreateParcelRequest;
+import com.jowk.parcel.core.dto.ParcelCreationResponse;
 import com.jowk.parcel.core.dto.ParcelStatusChangeRequest;
 import org.springframework.lang.Nullable;
 import java.util.UUID;
 
 public interface ParcelService {
+
+        ParcelCreationResponse createParcel(CreateParcelRequest request, UUID clientId);
 
     void markAsPaid(String trackingNumber, UUID clientId,
             @Nullable ParcelStatusChangeRequest request);
