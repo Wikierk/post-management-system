@@ -46,6 +46,13 @@ public class Branch implements AggregateRoot {
         this.isActive = false;
     }
 
+    public void activate() {
+        if (this.isActive) {
+            throw new IllegalStateException("Branch is already active.");
+        }
+        this.isActive = true;
+    }
+
     public void changeAddress(Address newAddress) {
         if (newAddress == null) {
             throw new IllegalArgumentException("Address cannot be null.");

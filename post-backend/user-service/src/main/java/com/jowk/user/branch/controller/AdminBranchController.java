@@ -62,4 +62,12 @@ public class AdminBranchController {
         adminBranchService.deactivateBranch(branchId);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Activate a branch")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{branchId}/activate")
+    public ResponseEntity<Void> activateBranch(@PathVariable UUID branchId) {
+        adminBranchService.activateBranch(branchId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -29,6 +29,8 @@ interface BranchesTableProps {
   onPageChange: (event: unknown, newPage: number) => void;
   onPageSizeChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onToggleStatus: (branchId: string, isActive: boolean) => void;
+  onCreateBranch: () => void;
+  onEditBranch: (branch: Branch) => void;
 }
 
 export default function BranchesTable({
@@ -39,11 +41,17 @@ export default function BranchesTable({
   onPageChange,
   onPageSizeChange,
   onToggleStatus,
+  onCreateBranch,
+  onEditBranch,
 }: BranchesTableProps) {
   return (
     <>
       <Box display="flex" justifyContent="flex-end" mb={2}>
-        <Button variant="contained" startIcon={<AddBusinessIcon />}>
+        <Button
+          variant="contained"
+          startIcon={<AddBusinessIcon />}
+          onClick={onCreateBranch}
+        >
           Dodaj Placówkę
         </Button>
       </Box>
@@ -99,7 +107,7 @@ export default function BranchesTable({
                 </TableCell>
                 <TableCell align="right">
                   <Tooltip title="Edytuj adres">
-                    <IconButton color="primary">
+                    <IconButton color="primary" onClick={() => onEditBranch(branch)}>
                       <EditIcon />
                     </IconButton>
                   </Tooltip>

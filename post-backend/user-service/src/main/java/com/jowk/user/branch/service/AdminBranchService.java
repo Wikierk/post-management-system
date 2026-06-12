@@ -40,13 +40,13 @@ public class AdminBranchService {
 
     @Transactional(readOnly = true)
     public Page<BranchDetails> getAllBranches(Pageable pageable) {
-        return branchRepository.findAll(pageable)
+        return branchRepository.findAllWithAddress(pageable)
                 .map(BranchDetails::fromEntity);
     }
 
     @Transactional(readOnly = true)
     public BranchDetails getBranchById(UUID branchId) {
-        return branchRepository.findById(branchId)
+        return branchRepository.findWithAddressById(branchId)
                 .map(BranchDetails::fromEntity)
                 .orElseThrow(() -> new EntityNotFoundException("Branch with ID " + branchId + " not found"));
     }
@@ -76,5 +76,14 @@ public class AdminBranchService {
 
         branch.deactivate();
         log.info("Admin deactivated branch {}", branchId);
+    }
+
+    @Transactional
+    public void activateBranch(UUID branchId) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch with ID " + branchId + " not found"));
+
+        branch.activate();
+        log.info("Admin activated branch {}", branchId);
     }
 }

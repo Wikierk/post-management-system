@@ -6,6 +6,7 @@ import { DashboardPage } from "./features/parcels/DashboardPage";
 import { AdminDashboardPage } from "./features/admin/AdminDashboardPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { RegisterPage } from "./features/auth/RegisterPage";
+import { TrackingPage } from "./features/parcels/TrackingPage";
 
 export const App = () => {
   const googleClientId =
@@ -19,6 +20,7 @@ export const App = () => {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/tracking" element={<TrackingPage />} />
 
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />} />
